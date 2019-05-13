@@ -33,7 +33,7 @@ body {
 }
 .header-container .header-bar  a  {
     color: white;
-    font-size: bold;
+    font-size: 120%;
 }
 
 .footer-container {

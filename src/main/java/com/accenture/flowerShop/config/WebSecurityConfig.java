@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
 
-/*
+
         http.authorizeRequests().antMatchers( "/accountInfo")//
                 .access("hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')");
 
@@ -52,6 +52,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Config for Logout Page
                 // (Go to home page).
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
-*/
+
     }
 }

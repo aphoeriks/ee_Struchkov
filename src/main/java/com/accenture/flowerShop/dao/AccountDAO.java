@@ -6,7 +6,7 @@ import com.accenture.flowerShop.form.RegistrationForm;
 public interface AccountDAO {
 
 
-    public Account findAccount(String userName );
+    Account findAccount(String userName );
 
 
 
