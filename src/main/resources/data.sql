@@ -1,0 +1,1 @@
+insert into Accounts (LOGIN, ACTIVE, PASSWORD, ROLE) values ('admin', 1, 'admin123', 'ADMIN');
