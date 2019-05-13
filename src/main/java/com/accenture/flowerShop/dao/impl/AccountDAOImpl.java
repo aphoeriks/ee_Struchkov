@@ -41,7 +41,7 @@ public class AccountDAOImpl implements AccountDAO {
             account = this.findAccount(login);
         }
         if (account != null) {
-            throw new Exception("Account already registered");
+            throw new Exception("Аккаунт уже зарегестрирован");
         }
 
         account = new Account();

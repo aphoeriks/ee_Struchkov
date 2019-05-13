@@ -1,7 +1,10 @@
 package com.accenture.flowerShop.controller;
 
 import com.accenture.flowerShop.dao.AccountDAO;
+import com.accenture.flowerShop.dao.FlowerDAO;
 import com.accenture.flowerShop.form.RegistrationForm;
+import com.accenture.flowerShop.model.FlowerInfo;
+import com.accenture.flowerShop.model.PaginationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.validation.Valid;
@@ -29,6 +29,8 @@ public class MainController {
 
     @Autowired
     private AccountDAO accountDAO;
+    @Autowired
+    private FlowerDAO flowerDAO;
     @Autowired
     private LocalValidatorFactoryBean validator;
 
@@ -68,7 +70,16 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String home() {
+    public String listFlowersHandler(Model model, //
+            @RequestParam(value = "name", defaultValue = "") String likeName,
+    @RequestParam(value = "page", defaultValue = "1") int page) {
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
+
+        PaginationResult<FlowerInfo> result = flowerDAO.queryFlowers(page, //
+                maxResult, maxNavigationPage, likeName);
+
+        model.addAttribute("paginationFlowers", result);
         return "index";
     }
     @GetMapping("/accountInfo")
@@ -81,6 +92,5 @@ public class MainController {
         model.addAttribute("userDetails", userDetails);
         return "accountInfo";
     }
-
 
 }

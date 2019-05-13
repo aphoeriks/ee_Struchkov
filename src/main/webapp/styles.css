@@ -75,7 +75,7 @@ body {
     border: 1px solid #ccc;
     padding: 0px 5px;
 }
-.product-preview-container {
+.flower-preview-container {
     border: 1px solid #ccc;
     padding: 5px;
     width: 250px;
@@ -84,12 +84,12 @@ body {
     text-align:left;
 }
 
-.product-preview-container input {
+.flower-preview-container input {
     width: 50px;
 }
 
 
-.product-image {
+.flower-image {
     width: 120px;
     height: 80px;
 }

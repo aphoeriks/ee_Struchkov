@@ -1,10 +1,11 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ page contentType="text/html;charset=utf-8" %>
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta charset="UTF-8">
-
-    <title>Flowers online shop</title>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 
@@ -15,12 +16,8 @@
 <jsp:include page="_header.jsp" />
 <jsp:include page="_menu.jsp" />
 
-<div class="page-title">Flowers online shop</div>
 
-<div class="demo-container">
-    <h3>Flowers will be here</h3>
-
-</div>
+<jsp:include page="_flowerList.jsp"/>
 
 
 <jsp:include page="_footer.jsp" />

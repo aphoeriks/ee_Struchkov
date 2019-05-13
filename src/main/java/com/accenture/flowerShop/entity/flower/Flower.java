@@ -12,9 +12,7 @@ import java.util.List;
 @Table(name = "FLOWERS")
 public class Flower implements Serializable {
     private static final long serialVersionUID = -2156548555669962336L;
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID",nullable = false)
-    private long id;
+    @Id
     @Column(name = "NAME",length = 20, nullable = false)
     private String name;
     @Column(name = "PRICE",nullable = false,precision = 10,scale = 2)
@@ -27,13 +25,6 @@ public class Flower implements Serializable {
 
     public Flower(){}
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

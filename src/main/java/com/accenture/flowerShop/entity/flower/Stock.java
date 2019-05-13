@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class Stock implements Serializable {
     private static final long serialVersionUID = -6160786723834487314L;
     @Id
-    @Column(name = "ID")
-    private long id;
+    @Column(name = "NAME",length = 20, nullable = false)
+    private String name;
     @Column(name = "QUANTITY")
     private long quantity;
 
@@ -18,12 +18,13 @@ public class Stock implements Serializable {
     private Flower flower;
 
     public Stock(){}
-    public long getId() {
-        return id;
+
+    public String getName() {
+        return name;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getQuantity() {

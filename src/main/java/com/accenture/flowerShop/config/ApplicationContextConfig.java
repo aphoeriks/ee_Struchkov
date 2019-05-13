@@ -1,7 +1,9 @@
 package com.accenture.flowerShop.config;
 
 import com.accenture.flowerShop.dao.AccountDAO;
+import com.accenture.flowerShop.dao.FlowerDAO;
 import com.accenture.flowerShop.dao.impl.AccountDAOImpl;
+import com.accenture.flowerShop.dao.impl.FlowerDAOImpl;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -93,6 +95,8 @@ public class ApplicationContextConfig {
     public AccountDAO getApplicantDAO() {
         return new AccountDAOImpl();
     }
+    @Bean(name = "flowerDAO")
+    public FlowerDAO getFlowerDAO(){return new FlowerDAOImpl();}
 
     @Bean(name="validator")
     public LocalValidatorFactoryBean validator(){
