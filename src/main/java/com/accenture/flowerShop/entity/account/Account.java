@@ -74,6 +74,9 @@ public class Account implements Serializable {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+    public void addOrder(Order order){
+        this.orders.add(order);
+    }
 
     public AccountContact getContact() {
         return contact;

@@ -19,7 +19,7 @@
 
 <jsp:include page="_flowerList.jsp"/>
 
-
+<jsp:include page="_cartList.jsp"/>
 <jsp:include page="_footer.jsp" />
 
 </body>

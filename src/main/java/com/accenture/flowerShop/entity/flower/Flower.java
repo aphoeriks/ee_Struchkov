@@ -13,7 +13,7 @@ import java.util.List;
 public class Flower implements Serializable {
     private static final long serialVersionUID = -2156548555669962336L;
     @Id
-    @Column(name = "NAME",length = 20, nullable = false)
+    @Column(name = "NAME",length = 30, nullable = false)
     private String name;
     @Column(name = "PRICE",nullable = false,precision = 10,scale = 2)
     private BigDecimal price;
@@ -36,6 +36,9 @@ public class Flower implements Serializable {
 
     public BigDecimal getPrice() {
         return price;
+    }
+    public void addFlowerInOrder(FlowerInOrder flowerInOrder){
+        this.flowersInOrder.add(flowerInOrder);
     }
 
     public void setPrice(BigDecimal price) {

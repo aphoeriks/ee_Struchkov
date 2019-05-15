@@ -5,12 +5,19 @@ import com.accenture.flowerShop.model.FlowerInfo;
 import com.accenture.flowerShop.model.PaginationResult;
 
 public interface FlowerDAO {
-    Flower FindFlower(long id);
 
-    FlowerInfo getFlowerInfo(long id);
 
-    PaginationResult<FlowerInfo> queryFlowers(int page,
-                                              int maxResult,
-                                              int maxNavigationPage,
-                                              String likeName);
+
+    Flower findFlower(String name);
+
+    FlowerInfo getFlowerInfo(String name);
+
+    PaginationResult<FlowerInfo> queryFlowers(
+            int page,
+            int maxResult,
+            int maxNavigationPage,
+            String likeName,
+            double priceMin,
+            double priceMax
+    );
 }

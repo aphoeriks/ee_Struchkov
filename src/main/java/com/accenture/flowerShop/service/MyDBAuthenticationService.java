@@ -1,4 +1,4 @@
-package com.accenture.flowerShop.authentication;
+package com.accenture.flowerShop.service;
 
 import com.accenture.flowerShop.dao.AccountDAO;
 import com.accenture.flowerShop.entity.account.Account;

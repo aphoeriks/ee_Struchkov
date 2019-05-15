@@ -1,6 +1,6 @@
 package com.accenture.flowerShop.config;
 
-import com.accenture.flowerShop.authentication.MyDBAuthenticationService;
+import com.accenture.flowerShop.service.MyDBAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -41,11 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
         // Config for Login Form
-        http.authorizeRequests().and().formLogin()//
+        http.authorizeRequests()
+                .and().formLogin()//
                 // Submit URL of login page.
                 .loginProcessingUrl("/j_spring_security_check") // Submit URL
                 .loginPage("/login")//
-                .defaultSuccessUrl("/accountInfo")//
+                .permitAll()
+                .defaultSuccessUrl("/account_data_initialisation")//
                 .failureUrl("/login?error=true")//
                 .usernameParameter("userName")//
                 .passwordParameter("password")

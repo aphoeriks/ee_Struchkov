@@ -39,6 +39,9 @@ public class Order implements Serializable {
     public void setAccount(Account account) {
         this.account = account;
     }
+    public void addFlowerInOrder(FlowerInOrder flowerInOrder){
+        this.flowersInOrder.add(flowerInOrder);
+    }
 
     public List<FlowerInOrder> getFlowersInOrder() {
         return flowersInOrder;
