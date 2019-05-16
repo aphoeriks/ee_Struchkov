@@ -10,7 +10,6 @@ public interface FlowerDAO {
 
     Flower findFlower(String name);
 
-    FlowerInfo getFlowerInfo(String name);
 
     PaginationResult<FlowerInfo> queryFlowers(
             int page,

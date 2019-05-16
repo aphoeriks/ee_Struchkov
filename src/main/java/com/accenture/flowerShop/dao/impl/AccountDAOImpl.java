@@ -28,7 +28,13 @@ public class AccountDAOImpl implements AccountDAO {
         crit.add(Restrictions.eq("login", login));
         return (Account) crit.uniqueResult();
     }
-
+    @Override
+    public AccountCommerce findAccountCommerce(String login){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Account.class);
+        crit.add(Restrictions.eq("login", login));
+        return (AccountCommerce) crit.uniqueResult();
+    }
 
     @Override
     public void save(RegistrationForm data) throws Exception{

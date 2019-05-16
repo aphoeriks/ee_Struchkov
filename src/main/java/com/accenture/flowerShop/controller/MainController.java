@@ -2,11 +2,13 @@ package com.accenture.flowerShop.controller;
 
 import com.accenture.flowerShop.dao.AccountDAO;
 import com.accenture.flowerShop.dao.FlowerDAO;
+import com.accenture.flowerShop.dao.OrderDAO;
 import com.accenture.flowerShop.form.FlowerCartFormLine;
 import com.accenture.flowerShop.form.RegistrationForm;
 import com.accenture.flowerShop.model.FlowerInfo;
+import com.accenture.flowerShop.model.OrderDto;
 import com.accenture.flowerShop.model.PaginationResult;
-import com.accenture.flowerShop.session.CartLine;
+import com.accenture.flowerShop.model.CartLine;
 import com.accenture.flowerShop.session.SessionScopeAccountData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 
 @Controller
@@ -34,6 +37,8 @@ public class MainController {
     private AccountDAO accountDAO;
     @Autowired
     private FlowerDAO flowerDAO;
+    @Autowired
+    private OrderDAO orderDAO;
     @Autowired
     private SessionScopeAccountData accountData;
 
@@ -120,9 +125,68 @@ public class MainController {
         accountData.initialize(accountDAO.findAccount(userDetails.getUsername()));
         return "redirect:/";
     }
-    @PostMapping("/CreateNewOrder")
-    public String creatingOrder(Model model){
-        return "";
+    @GetMapping("/CreateNewOrder")
+    public String creatingOrder(Model model,
+            HttpServletRequest request){
+        try {
+            orderDAO.save(accountData.getLogin(),accountData.getDiscount(), accountData.getCartInfo());
+        }catch (Exception e){
+            return "redirect:"+request.getHeader("referer");
+        }
+        accountData.clearCart();
+        return "redirect:/orders";
     }
+    @RequestMapping("/orders")
+    public String listOrders(
+            Model model,//
+            @RequestParam(value = "page", defaultValue = "1") int page){
 
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
+
+        PaginationResult<OrderDto> paginationResult = orderDAO.queryOrders(page, //
+                maxResult, maxNavigationPage, "sortByDate");
+        model.addAttribute("accountData", accountData);
+        model.addAttribute("paginationOrders", paginationResult);
+        return "orders";
+    }
+    @PostMapping("/payOrder")
+    public String payOrder(HttpServletRequest request,
+                           @RequestParam(value = "OrderId") long orderId){
+
+        try {
+            BigDecimal newBalance;
+            newBalance = orderDAO.payOrder(orderId);
+
+            accountData.setBalance(newBalance);
+        }catch (Exception e){
+            return "redirect:"+request.getHeader("referer");
+        }
+        return "redirect:"+request.getHeader("referer");
+    }
+    @RequestMapping("/orderList")
+    public String listAdminOrders(
+            Model model,//
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "sortType", defaultValue = "sortByDate")String sortType){
+
+        final int maxResult = 5;
+        final int maxNavigationPage = 10;
+
+        PaginationResult<OrderDto> paginationResult = orderDAO.queryOrders(page, //
+                maxResult, maxNavigationPage, sortType, false);
+        model.addAttribute("accountData", accountData);
+        model.addAttribute("paginationOrders", paginationResult);
+        return "orderList";
+    }
+    @PostMapping("/closeOrder")
+    public String closeOrder(HttpServletRequest request,
+                             @RequestParam(value = "OrderId") long orderId){
+        try {
+            orderDAO.closeOrder(orderId);
+        }catch (Exception e){
+            return "redirect:"+request.getHeader("referer");
+        }
+        return "redirect:"+request.getHeader("referer");
+    }
 }

@@ -27,12 +27,12 @@ public class FlowerDAOImpl implements FlowerDAO {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Flower> criteria = builder.createQuery(Flower.class);
         Root<Flower> root = criteria.from(Flower.class);
-        criteria.select(root).where(builder.equal(root.get("id"), name));
+        criteria.select(root).where(builder.equal(root.get("name"), name));
         Query<Flower> query = session.createQuery(criteria);
         Flower flower = query.getSingleResult();
         return flower;
     }
-    @Override
+    /*@Override
     public FlowerInfo getFlowerInfo(String name){
         Flower flower = this.findFlower(name);
         if(flower == null){
@@ -42,7 +42,7 @@ public class FlowerDAOImpl implements FlowerDAO {
                 flower.getName(),
                 flower.getPrice(),
                 flower.getStock().getQuantity());
-    }
+    }*/
 
     @Override
     public PaginationResult<FlowerInfo> queryFlowers(
