@@ -1,14 +1,14 @@
 package com.accenture.flowerShop.dao.impl;
 
 import com.accenture.flowerShop.dao.AccountDAO;
+import com.accenture.flowerShop.entity.account.Account;
 import com.accenture.flowerShop.entity.account.AccountCommerce;
 import com.accenture.flowerShop.entity.account.AccountContact;
+import com.accenture.flowerShop.form.RegistrationForm;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import com.accenture.flowerShop.entity.account.Account;
-import com.accenture.flowerShop.form.RegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +28,13 @@ public class AccountDAOImpl implements AccountDAO {
         crit.add(Restrictions.eq("login", login));
         return (Account) crit.uniqueResult();
     }
-
+    @Override
+    public AccountCommerce findAccountCommerce(String login){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria crit = session.createCriteria(Account.class);
+        crit.add(Restrictions.eq("login", login));
+        return (AccountCommerce) crit.uniqueResult();
+    }
 
     @Override
     public void save(RegistrationForm data) throws Exception{
@@ -64,5 +70,6 @@ public class AccountDAOImpl implements AccountDAO {
         account.setContact(contact);
         this.sessionFactory.getCurrentSession().persist(account);
     }
+
 
 }

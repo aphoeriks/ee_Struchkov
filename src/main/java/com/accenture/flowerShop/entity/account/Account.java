@@ -4,6 +4,7 @@ import com.accenture.flowerShop.entity.order.Order;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,7 +41,9 @@ public class Account implements Serializable {
     @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
     private AccountCommerce commerce;
 
-    public Account(){}
+    public Account( ){
+        this.orders = new ArrayList<Order>();
+    }
 
 
     public String getLogin() {
@@ -73,6 +76,9 @@ public class Account implements Serializable {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+    public void addOrder(Order order){
+        this.orders.add(order);
     }
 
     public AccountContact getContact() {

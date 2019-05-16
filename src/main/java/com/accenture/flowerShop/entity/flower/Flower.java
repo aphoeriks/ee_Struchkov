@@ -6,14 +6,16 @@ import com.accenture.flowerShop.entity.order.FlowerInOrder;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "FLOWERS")
 public class Flower implements Serializable {
     private static final long serialVersionUID = -2156548555669962336L;
     @Id
-    @Column(name = "NAME",length = 20, nullable = false)
+    @Column(name = "NAME",length = 30, nullable = false)
     private String name;
     @Column(name = "PRICE",nullable = false,precision = 10,scale = 2)
     private BigDecimal price;
@@ -23,7 +25,12 @@ public class Flower implements Serializable {
     @OneToOne(mappedBy = "flower")
     private Stock stock;
 
-    public Flower(){}
+    public Flower(){
+        flowersInOrder = new ArrayList<FlowerInOrder>();
+    }
+    public Flower(String name){
+        this.name = name;
+    }
 
 
     public String getName() {
@@ -36,6 +43,9 @@ public class Flower implements Serializable {
 
     public BigDecimal getPrice() {
         return price;
+    }
+    public void addFlowerInOrder(FlowerInOrder flowerInOrder){
+        this.flowersInOrder.add(flowerInOrder);
     }
 
     public void setPrice(BigDecimal price) {
@@ -56,5 +66,18 @@ public class Flower implements Serializable {
 
     public void setStock(Stock stock) {
         this.stock = stock;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Flower)) return false;
+        Flower flower = (Flower) o;
+        return name.equals(flower.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

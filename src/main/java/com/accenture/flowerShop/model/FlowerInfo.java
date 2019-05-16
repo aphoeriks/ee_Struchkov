@@ -6,6 +6,7 @@ public class FlowerInfo {
     private String name;
     private BigDecimal price;
     private long inStock;
+    private long amountToBuy;
     public FlowerInfo(){}
     public FlowerInfo(
                String name,

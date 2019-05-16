@@ -8,6 +8,9 @@ import java.util.Date;
 @Table(name = "ORDER_INFO")
 public class OrderInfo implements Serializable {
     private static final long serialVersionUID = 3679087640051504362L;
+    public static final String STATUS_CREATE = "Создан";
+    public static final String STATUS_PAID = "Оплачен";
+    public static final String STATUS_CLOSED = "Выполнен";
     @Id
     @Column(name = "ID")
     private long id;
@@ -31,7 +34,10 @@ public class OrderInfo implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-
+    @PrePersist
+    public void prePersist() {
+        createDate = new Date();
+    }
     public Date getCreateDate() {
         return createDate;
     }

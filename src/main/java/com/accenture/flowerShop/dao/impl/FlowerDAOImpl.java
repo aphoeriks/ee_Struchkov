@@ -21,20 +21,20 @@ public class FlowerDAOImpl implements FlowerDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public Flower FindFlower(long id){
+    public Flower findFlower(String name){
 
         Session session =sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Flower> criteria = builder.createQuery(Flower.class);
         Root<Flower> root = criteria.from(Flower.class);
-        criteria.select(root).where(builder.equal(root.get("id"), id));
+        criteria.select(root).where(builder.equal(root.get("name"), name));
         Query<Flower> query = session.createQuery(criteria);
         Flower flower = query.getSingleResult();
         return flower;
     }
-    @Override
-    public FlowerInfo getFlowerInfo(long id){
-        Flower flower = this.FindFlower(id);
+    /*@Override
+    public FlowerInfo getFlowerInfo(String name){
+        Flower flower = this.findFlower(name);
         if(flower == null){
             return null;
         }
@@ -42,13 +42,18 @@ public class FlowerDAOImpl implements FlowerDAO {
                 flower.getName(),
                 flower.getPrice(),
                 flower.getStock().getQuantity());
-    }
+    }*/
 
     @Override
-    public PaginationResult<FlowerInfo> queryFlowers(int page,
-                                                     int maxResult,
-                                                     int maxNavigationPage,
-                                                     String likeName){
+    public PaginationResult<FlowerInfo> queryFlowers(
+            int page,
+            int maxResult,
+            int maxNavigationPage,
+            String likeName,
+            double priceMin,
+            double priceMax
+    ){
+
         String sql = "Select new " + FlowerInfo.class.getName() //
                 + "( p.name, p.price, q.quantity) " + " from "//
                 + Flower.class.getName() + " p ,"
@@ -56,6 +61,12 @@ public class FlowerDAOImpl implements FlowerDAO {
                 "where lower(p.name) = lower(q.name) ";
         if (likeName != null && likeName.length() > 0) {
             sql += " and lower(p.name) like :likeName ";
+        }
+        if (priceMin > 0 ){
+            sql += "and p.price > " + priceMin;
+        }
+        if (priceMax > 0 && priceMax > priceMin){
+            sql += "and p.price < " + priceMax;
         }
         sql += " order by p.price desc ";
         Session session = sessionFactory.getCurrentSession();

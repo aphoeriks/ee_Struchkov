@@ -8,14 +8,14 @@
 <div class="menu-container">
 
     <a href="${pageContext.request.contextPath}/">Home</a>
-    |
     <security:authorize access="hasAnyRole('ROLE_CUSTOMER')">
-    <a href="${pageContext.request.contextPath}/shoppingCart">
-        Моя корзина
+    |
+    <a href="${pageContext.request.contextPath}/orders">
+        Мои заказы
     </a>
     </security:authorize>
-    |
     <security:authorize  access="hasAnyRole('ROLE_ADMIN')">
+    |
         <a href="${pageContext.request.contextPath}/orderList">
             Список заказов
         </a>
