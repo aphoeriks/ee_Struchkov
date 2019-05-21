@@ -11,13 +11,46 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 
 </head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".login-input").on('change', function postinput(){
+            var loginValue = $(this).val();
+            $.ajax({
+                url: '${pageContext.request.contextPath}/rest/'+loginValue,
+                async: true,
+                type: 'get',
+                success: function(responseData) {
+                    var messageElement = document.getElementById("login-error");
+                    var submitButton = document.getElementById("registration_form_submit")
+                    if(responseData.length < 20) {
+                        messageElement.setAttribute("class", "valid-message");
+                        submitButton.removeAttribute("disabled");
+                    }else{
+                        messageElement.setAttribute("class", "error-message");
+                        submitButton.setAttribute("disabled","disabled");
+                    }
+                    messageElement.innerText = responseData;
+                    console.log('Done: ', responseData);
+                },
+                error: function(responseData)  {
+                console.log('error: ', responseData);
+            }
+            });
+    })})
+
+</script>
 <body>
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_menu.jsp" />
 
 <div class="page-title">Registration</div>
-
+<c:if test="${not empty error }">
+    <div class="error-message">
+            ${error}
+    </div>
+</c:if>
 
 
 <form:form modelAttribute="registrationForm" method="POST" enctype="form-data" action="${pageContext.request.contextPath}/registrationCheck">
@@ -26,8 +59,9 @@
 
         <tr>
             <td>Логин *</td>
-            <td><form:input path="login" /></td>
+            <td> <form:input path="login" maxlength="20" class="login-input"/></td>
             <td><form:errors path="login" class="error-message" />
+                <span id="login-error"> </span>
                 <c:if test="${not empty message }">
                     <div class="error-message">
                             ${message}
@@ -75,7 +109,7 @@
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><input type="submit" /> <input type="reset"/></td>
+            <td><input type="submit" disabled id="registration_form_submit"/> <input type="reset"/></td>
         </tr>
     </table>
 </form:form>

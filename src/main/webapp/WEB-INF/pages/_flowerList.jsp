@@ -15,10 +15,11 @@
           action="${pageContext.request.contextPath}/">
         <div style=".flower-preview-container ">
         <tr>
-            <input type="submit" value="Поиск"/>  по названию: <input name="name" type="text"/>
+            <input type="submit" value="Поиск"/>  по названию: <input name="name" type="text" value="${name}"/>
         </tr>
         <tr>
-            с ценой от: <input name="priceMin" /> до: <input name="priceMax"/>
+            с ценой от: <input name="priceMin" <c:if test="${priceMin > 0}"> value="${priceMin}" </c:if>/>
+            до: <input name="priceMax" <c:if test="${priceMax > 0}"> value="${priceMax}" </c:if>/>
         </tr>
         </div>
     </form>
@@ -55,7 +56,7 @@
     <div class="page-navigator">
         <c:forEach items="${paginationFlowers.navigationPages}" var = "page">
             <c:if test="${page != -1 }">
-                <a href="${pageContext.request.contextPath}/?page=${page}" class="nav-item">${page}</a>
+                <a href="${pageContext.request.contextPath}/?page=${page}&name=${name}&priceMin=${priceMin}&priceMax=${priceMax}" class="nav-item">${page}</a>
             </c:if>
             <c:if test="${page == -1 }">
                 <span class="nav-item"> ... </span>

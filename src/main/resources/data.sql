@@ -1,7 +1,10 @@
 insert into Accounts (LOGIN, ACTIVE, PASSWORD, ROLE) values ('admin', 1, 'admin123', 'ADMIN');
 insert into Accounts (LOGIN, ACTIVE, PASSWORD, ROLE) values ('user', 1, 'user123', 'CUSTOMER');
+insert into Accounts (LOGIN, ACTIVE, PASSWORD, ROLE) values ('user2', 1, 'user123', 'CUSTOMER');
 insert into ACCOUNT_CONTACT(address, name, patronymic, phone, surname, account_login) VALUES ( 'test address', 'test name', 'test patronymic', 'test phone', 'test surname', select login from ACCOUNTS where LOGIN = 'user');
 insert into ACCOUNT_COMMERCE(balance, discount, account_login) values ( 2000, 5, select login from ACCOUNTS where LOGIN = 'user');
+insert into ACCOUNT_CONTACT(address, name, patronymic, phone, surname, account_login) VALUES ( 'test address', 'test name', 'test patronymic', 'test phone', 'test surname', select login from ACCOUNTS where LOGIN = 'user2');
+insert into ACCOUNT_COMMERCE(balance, discount, account_login) values ( 2000, 5, select login from ACCOUNTS where LOGIN = 'user2');
 insert into FLOWERS (NAME, PRICE) values ('Red rose', 1.40);
 insert into FLOWERS(name, price) VALUES ( 'Violes', 0.5 );
 insert into FLOWERS (NAME, PRICE) values ('Black rose', 2.10);

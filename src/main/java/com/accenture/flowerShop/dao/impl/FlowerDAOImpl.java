@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 public class FlowerDAOImpl implements FlowerDAO {
@@ -29,8 +30,26 @@ public class FlowerDAOImpl implements FlowerDAO {
         Root<Flower> root = criteria.from(Flower.class);
         criteria.select(root).where(builder.equal(root.get("name"), name));
         Query<Flower> query = session.createQuery(criteria);
-        Flower flower = query.getSingleResult();
-        return flower;
+
+        return query.getSingleResult();
+    }
+    @Override
+    public List<Stock> getAllStocks(){
+        Session session =sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Stock> criteria = builder.createQuery(Stock.class);
+        Root<Stock> root = criteria.from(Stock.class);
+        criteria.select(root);
+        Query<Stock> query = session.createQuery(criteria);
+        return query.getResultList();
+    }
+    @Override
+    public boolean updateStocks(List<Stock> stocks) throws Exception{
+        Session session =sessionFactory.getCurrentSession();
+        for(Stock stock : stocks){
+            session.update(stock);
+        }
+        return true;
     }
     /*@Override
     public FlowerInfo getFlowerInfo(String name){

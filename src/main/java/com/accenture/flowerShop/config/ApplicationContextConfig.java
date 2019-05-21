@@ -6,6 +6,7 @@ import com.accenture.flowerShop.dao.OrderDAO;
 import com.accenture.flowerShop.dao.impl.AccountDAOImpl;
 import com.accenture.flowerShop.dao.impl.FlowerDAOImpl;
 import com.accenture.flowerShop.dao.impl.OrderDaoImpl;
+import com.accenture.flowerShop.service.UserMarshallingServiceImpl;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.oxm.castor.CastorMarshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -105,6 +107,17 @@ public class ApplicationContextConfig {
     public LocalValidatorFactoryBean validator(){
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         return bean;
+    }
+    @Bean
+    public CastorMarshaller castorMarshaller(){
+        return new CastorMarshaller();
+    }
+    @Bean
+    public UserMarshallingServiceImpl getUserMarshallingServiceImpl() {
+        UserMarshallingServiceImpl userMarshallingService = new UserMarshallingServiceImpl();
+        CastorMarshaller marshaller = castorMarshaller();
+        userMarshallingService.setMarshaller(marshaller);
+        return userMarshallingService;
     }
 
 

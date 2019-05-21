@@ -12,5 +12,5 @@ public interface AccountDAO {
 
     AccountCommerce findAccountCommerce(String login);
 
-    void save(RegistrationForm registrationForm) throws Exception;
+    Account save(RegistrationForm registrationForm) throws Exception;
 }

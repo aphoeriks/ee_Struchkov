@@ -120,6 +120,11 @@ ul {
     color: red;
     font-style: italic;
 }
+.valid-message {
+    font-size: 90%;
+    color: greenyellow;
+    font-style: italic;
+}
 
 .price {
     color: blue;

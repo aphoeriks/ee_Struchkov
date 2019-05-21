@@ -37,7 +37,7 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public void save(RegistrationForm data) throws Exception{
+    public Account save(RegistrationForm data) throws Exception{
         String login = data.getLogin();
 
 
@@ -69,6 +69,7 @@ public class AccountDAOImpl implements AccountDAO {
         contact.setAccount(account);
         account.setContact(contact);
         this.sessionFactory.getCurrentSession().persist(account);
+        return  account;
     }
 
 

@@ -3,12 +3,14 @@ package com.accenture.flowerShop.controller;
 import com.accenture.flowerShop.dao.AccountDAO;
 import com.accenture.flowerShop.dao.FlowerDAO;
 import com.accenture.flowerShop.dao.OrderDAO;
+import com.accenture.flowerShop.entity.account.Account;
 import com.accenture.flowerShop.form.FlowerCartFormLine;
 import com.accenture.flowerShop.form.RegistrationForm;
+import com.accenture.flowerShop.model.CartLine;
 import com.accenture.flowerShop.model.FlowerInfo;
 import com.accenture.flowerShop.model.OrderDto;
 import com.accenture.flowerShop.model.PaginationResult;
-import com.accenture.flowerShop.model.CartLine;
+import com.accenture.flowerShop.service.UserMarshallingServiceImpl;
 import com.accenture.flowerShop.session.SessionScopeAccountData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +43,8 @@ public class MainController {
     private OrderDAO orderDAO;
     @Autowired
     private SessionScopeAccountData accountData;
+    @Autowired
+    UserMarshallingServiceImpl marshallingService;
 
 
 
@@ -57,13 +61,22 @@ public class MainController {
         if (result.hasErrors()) {
             return "registration";
         }
+        Account account;
         try {
-            accountDAO.save(registrationForm);
+            account = accountDAO.save(registrationForm);
+
         } catch (Exception e) {
             String message = e.getMessage();
             model.addAttribute("message", message);
             return "registration";
 
+        }
+        if(account != null){
+            try{
+                marshallingService.convertFromObjectToXML(account);
+            }catch (Exception e){
+                model.addAttribute("error", e.getMessage());
+            }
         }
         return "redirect:/login";
     }
@@ -92,6 +105,9 @@ public class MainController {
 
         PaginationResult<FlowerInfo> paginationResult = flowerDAO.queryFlowers(page, //
                 maxResult, maxNavigationPage, likeName, priceMin, priceMax);
+        model.addAttribute("name", likeName);
+        model.addAttribute("priceMin", priceMin);
+        model.addAttribute("priceMax", priceMax);
         model.addAttribute("accountData", accountData);
         model.addAttribute("paginationFlowers", paginationResult);
         return "index";
