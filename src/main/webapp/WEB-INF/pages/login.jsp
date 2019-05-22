@@ -29,7 +29,7 @@
     <c:if test="${param.error == 'true'}">
         <div style="color: red; margin: 10px 0px;">
 
-            Не удалось войти по причине:<br /> Reason :
+            Не удалось войти <br /> Reason :
                 ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
 
         </div>

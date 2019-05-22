@@ -1,5 +1,6 @@
 package com.accenture.flowerShop.controller;
 
+import com.accenture.flowerShop.controller.JMS.MessageSender;
 import com.accenture.flowerShop.dao.AccountDAO;
 import com.accenture.flowerShop.dao.FlowerDAO;
 import com.accenture.flowerShop.dao.OrderDAO;
@@ -45,6 +46,8 @@ public class MainController {
     private SessionScopeAccountData accountData;
     @Autowired
     UserMarshallingServiceImpl marshallingService;
+    @Autowired
+    MessageSender messageSender;
 
 
 
@@ -71,9 +74,12 @@ public class MainController {
             return "registration";
 
         }
+        try {
+            messageSender.sendMessage(account);
+        }catch (Exception e){}
         if(account != null){
             try{
-                marshallingService.convertFromObjectToXML(account);
+                marshallingService.convertFromObjectToXMLAndSave(account);
             }catch (Exception e){
                 model.addAttribute("error", e.getMessage());
             }
@@ -137,6 +143,7 @@ public class MainController {
     }
     @GetMapping("/account_data_initialisation")
     public String accountDataInitialisation(Model model){
+
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         accountData.initialize(accountDAO.findAccount(userDetails.getUsername()));
         return "redirect:/";
@@ -205,4 +212,6 @@ public class MainController {
         }
         return "redirect:"+request.getHeader("referer");
     }
+    @GetMapping("/test")
+    public String testPage(){return "test";}
 }

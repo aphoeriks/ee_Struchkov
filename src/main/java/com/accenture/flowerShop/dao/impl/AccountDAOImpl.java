@@ -29,6 +29,17 @@ public class AccountDAOImpl implements AccountDAO {
         return (Account) crit.uniqueResult();
     }
     @Override
+    public Account update(Account account) throws Exception{
+        sessionFactory.getCurrentSession().update(account);
+        return account;
+    }
+    @Override
+    public void updateCommerce(String login, int discount) throws Exception{
+        Account account = findAccount( login);
+        account.getCommerce().setDiscount(discount);
+        sessionFactory.getCurrentSession().update(account);
+    }
+    @Override
     public AccountCommerce findAccountCommerce(String login){
         Session session = sessionFactory.getCurrentSession();
         Criteria crit = session.createCriteria(Account.class);

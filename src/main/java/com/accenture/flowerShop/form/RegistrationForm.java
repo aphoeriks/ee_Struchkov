@@ -4,22 +4,22 @@ package com.accenture.flowerShop.form;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 public class RegistrationForm {
-    @Size(min=4, max=20)
+    @Size(min=4, max=20,message = "Длина логина должна быть от 4 до 20 символов")
     private String login;
-    @Size(min=4, max=20)
+    @Size(min=4, max=20,message = "Длина пароля должна быть от 4 до 20 символов")
     private String password;
     private String matchingPassword;
     @AssertTrue(message = "пароли должны быть одинаковыми")
     private boolean equalPasswords;
-    @Size(min=4, max=20)
+    @Size(min=4, max=20,message = "Длина должна быть от 4 до 20 символов")
     private String address;
-    @Size(min=4, max=20)
+    @Size(min=4, max=20,message = "Длина должна быть от 4 до 20 символов")
     private String phone;
-    @Size(min=2, max=20)
+    @Size(min=2, max=20,message = "Длина должна быть от 2 до 20 символов")
     private String name;
-    @Size(min=2, max=20)
+    @Size(min=2, max=20,message = "Длина должна быть от 2 до 20 символов")
     private String surname;
-    @Size(min=2, max=20)
+    @Size(min=2, max=20,message = "Длина должна быть от 2 до 20 символов")
     private String patronymic;
 
     public String getLogin() {

@@ -17,7 +17,7 @@
         $(".login-input").on('change', function postinput(){
             var loginValue = $(this).val();
             $.ajax({
-                url: '${pageContext.request.contextPath}/rest/'+loginValue,
+                url: '${pageContext.request.contextPath}/rest/checkLogin/'+loginValue,
                 async: true,
                 type: 'get',
                 success: function(responseData) {

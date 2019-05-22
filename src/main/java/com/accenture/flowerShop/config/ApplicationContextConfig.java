@@ -8,6 +8,8 @@ import com.accenture.flowerShop.dao.impl.FlowerDAOImpl;
 import com.accenture.flowerShop.dao.impl.OrderDaoImpl;
 import com.accenture.flowerShop.service.UserMarshallingServiceImpl;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -36,7 +38,7 @@ public class ApplicationContextConfig {
     // and stores all the properties loaded by the @PropertySource
     @Autowired
     private Environment env;
-
+    Logger logger = LoggerFactory.getLogger(ApplicationContextConfig.class);
 
 
     @Bean(name = "viewResolver")
@@ -44,6 +46,7 @@ public class ApplicationContextConfig {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/pages/");
         viewResolver.setSuffix(".jsp");
+        logger.debug("viewResolver bean initialized");
         return viewResolver;
     }
     @Bean(name = "dataSource")
@@ -57,7 +60,7 @@ public class ApplicationContextConfig {
         dataSource.setPassword(env.getProperty("ds.password"));
 
         System.out.println("## getDataSource: " + dataSource);
-
+        logger.debug("dataSource bean initialized");
         return dataSource;
     }
 
@@ -84,6 +87,8 @@ public class ApplicationContextConfig {
         //
         SessionFactory sf = factoryBean.getObject();
         System.out.println("## getSessionFactory: " + sf);
+        logger.debug("sessionFactory bean initialized");
+
         return sf;
     }
 
@@ -91,25 +96,34 @@ public class ApplicationContextConfig {
     @Bean(name = "transactionManager")
     public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
+        logger.debug("transactionManager bean initialized");
 
         return transactionManager;
     }
 
     @Bean(name = "accountDAO")
     public AccountDAO getApplicantDAO() {
+
+        logger.debug("accountDAO bean initialized");
         return new AccountDAOImpl();
     }
     @Bean(name = "flowerDAO")
-    public FlowerDAO getFlowerDAO(){return new FlowerDAOImpl();}
+    public FlowerDAO getFlowerDAO(){
+        logger.debug("flowerDAO bean initialized");
+        return new FlowerDAOImpl();}
     @Bean(name = "orderDAO")
-    public OrderDAO getOrderDAO(){return new OrderDaoImpl();}
+    public OrderDAO getOrderDAO(){
+        logger.debug("orderDAO bean initialized");
+        return new OrderDaoImpl();}
     @Bean(name="validator")
     public LocalValidatorFactoryBean validator(){
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        logger.debug("validator bean initialized");
         return bean;
     }
     @Bean
     public CastorMarshaller castorMarshaller(){
+        logger.debug("castorMarshaller bean initialized");
         return new CastorMarshaller();
     }
     @Bean
@@ -117,6 +131,7 @@ public class ApplicationContextConfig {
         UserMarshallingServiceImpl userMarshallingService = new UserMarshallingServiceImpl();
         CastorMarshaller marshaller = castorMarshaller();
         userMarshallingService.setMarshaller(marshaller);
+        logger.debug("getUserMarshallingServiceImpl bean initialized");
         return userMarshallingService;
     }
 

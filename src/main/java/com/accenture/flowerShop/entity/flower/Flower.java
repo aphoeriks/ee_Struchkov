@@ -31,6 +31,12 @@ public class Flower implements Serializable {
     public Flower(String name){
         this.name = name;
     }
+    public Flower(String name, BigDecimal price){
+        this.name = name;
+        this.price = price;
+        this.stock = new Stock();
+        this.stock.setQuantity(111);
+    }
 
 
     public String getName() {
@@ -80,4 +86,6 @@ public class Flower implements Serializable {
     public int hashCode() {
         return Objects.hash(name);
     }
+    @Override
+    public String toString(){return this.name;}
 }

@@ -10,6 +10,11 @@ public interface AccountDAO {
     Account findAccount(String userName );
 
 
+    Account update(Account account) throws Exception;
+
+
+    void updateCommerce(String login, int discount) throws Exception;
+
     AccountCommerce findAccountCommerce(String login);
 
     Account save(RegistrationForm registrationForm) throws Exception;

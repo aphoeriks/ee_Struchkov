@@ -34,6 +34,16 @@ public class FlowerDAOImpl implements FlowerDAO {
         return query.getSingleResult();
     }
     @Override
+    public List<Flower> getAllFlowers(){
+        Session session =sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Flower> criteria = builder.createQuery(Flower.class);
+        Root<Flower> root = criteria.from(Flower.class);
+        criteria.select(root);
+        Query<Flower> query = session.createQuery(criteria);
+        return query.getResultList();
+    }
+    @Override
     public List<Stock> getAllStocks(){
         Session session =sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

@@ -14,6 +14,8 @@ public interface FlowerDAO {
     Flower findFlower(String name);
 
 
+    List<Flower> getAllFlowers();
+
     List<Stock> getAllStocks();
 
     boolean updateStocks(List<Stock> stocks) throws Exception;
