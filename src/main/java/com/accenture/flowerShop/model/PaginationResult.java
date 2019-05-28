@@ -4,6 +4,7 @@ import org.hibernate.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,6 @@ public class PaginationResult<E> {
     private int maxNavigationPage;
 
     private List<Integer> navigationPages;
-
     // @page: 1, 2, ..
     public PaginationResult(Query query, int page, int maxResult, int maxNavigationPage) {
         final int pageIndex = page - 1 < 0 ? 0 : page - 1;

@@ -21,6 +21,11 @@ public class FlowerInOrder implements Serializable {
     private Order order;
     private long quantity;
     public FlowerInOrder(){}
+    public FlowerInOrder(Flower flower, Order order, long quantity){
+        this.flower = flower;
+        this.order = order;
+        this.quantity = quantity;
+    }
     public long getId() {
         return id;
     }

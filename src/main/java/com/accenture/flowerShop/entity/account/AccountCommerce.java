@@ -19,7 +19,10 @@ public class AccountCommerce implements Serializable {
     @MapsId
     private Account account;
 
-    public AccountCommerce(){}
+    public AccountCommerce(){
+        balance = new BigDecimal(2000);
+        discount = 5;
+    }
 
     public String getLogin() {
         return login;

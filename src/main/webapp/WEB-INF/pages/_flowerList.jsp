@@ -31,7 +31,6 @@
         <td>Добавить в заказ</td>
     </tr>
 <c:forEach items="${paginationFlowers.list}" var="flowerInfo">
-
     <tr>
         <td>${flowerInfo.name}</td>
         <td>&#8381 ${flowerInfo.price} ></td>
@@ -55,6 +54,7 @@
 <c:if test="${paginationFlowers.totalPages > 1}">
     <div class="page-navigator">
         <c:forEach items="${paginationFlowers.navigationPages}" var = "page">
+
             <c:if test="${page != -1 }">
                 <a href="${pageContext.request.contextPath}/?page=${page}&name=${name}&priceMin=${priceMin}&priceMax=${priceMax}" class="nav-item">${page}</a>
             </c:if>

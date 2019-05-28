@@ -40,6 +40,16 @@ public class Account implements Serializable {
 
     @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
     private AccountCommerce commerce;
+    public Account(String login, String password, String role, AccountContact contact, AccountCommerce commerce){
+        setLogin(login);
+        this.password = password;
+        this.Role = role;
+        this.active = true;
+        this.commerce = commerce;
+        this.contact = contact;
+        commerce.setAccount(this);
+        contact.setAccount(this);
+    }
 
     public Account( ){
         this.orders = new ArrayList<Order>();
@@ -79,6 +89,7 @@ public class Account implements Serializable {
     }
     public void addOrder(Order order){
         this.orders.add(order);
+        order.setAccount(this);
     }
 
     public AccountContact getContact() {

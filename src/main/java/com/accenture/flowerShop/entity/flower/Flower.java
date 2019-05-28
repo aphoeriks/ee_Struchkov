@@ -24,18 +24,21 @@ public class Flower implements Serializable {
     private List<FlowerInOrder> flowersInOrder;
     @OneToOne(mappedBy = "flower")
     private Stock stock;
-
     public Flower(){
         flowersInOrder = new ArrayList<FlowerInOrder>();
     }
     public Flower(String name){
-        this.name = name;
+        this(name, new BigDecimal(4), 300);
     }
     public Flower(String name, BigDecimal price){
+        this(name,price,300);
+    }
+    public Flower(String name, BigDecimal price, long quantity){
         this.name = name;
         this.price = price;
         this.stock = new Stock();
-        this.stock.setQuantity(111);
+        this.stock.setQuantity(quantity);
+        flowersInOrder = new ArrayList<FlowerInOrder>();
     }
 
 

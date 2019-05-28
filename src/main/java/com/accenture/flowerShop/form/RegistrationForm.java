@@ -1,6 +1,8 @@
 package com.accenture.flowerShop.form;
 
 
+import com.accenture.flowerShop.entity.account.AccountContact;
+
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 public class RegistrationForm {
@@ -21,6 +23,9 @@ public class RegistrationForm {
     private String surname;
     @Size(min=2, max=20,message = "Длина должна быть от 2 до 20 символов")
     private String patronymic;
+    public AccountContact getContact(){
+        return  new AccountContact(name,surname,patronymic,address,phone);
+    }
 
     public String getLogin() {
         return login;

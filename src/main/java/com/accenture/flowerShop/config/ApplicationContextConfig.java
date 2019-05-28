@@ -101,20 +101,6 @@ public class ApplicationContextConfig {
         return transactionManager;
     }
 
-    @Bean(name = "accountDAO")
-    public AccountDAO getApplicantDAO() {
-
-        logger.debug("accountDAO bean initialized");
-        return new AccountDAOImpl();
-    }
-    @Bean(name = "flowerDAO")
-    public FlowerDAO getFlowerDAO(){
-        logger.debug("flowerDAO bean initialized");
-        return new FlowerDAOImpl();}
-    @Bean(name = "orderDAO")
-    public OrderDAO getOrderDAO(){
-        logger.debug("orderDAO bean initialized");
-        return new OrderDaoImpl();}
     @Bean(name="validator")
     public LocalValidatorFactoryBean validator(){
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();

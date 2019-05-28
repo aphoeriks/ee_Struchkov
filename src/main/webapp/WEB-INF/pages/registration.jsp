@@ -16,25 +16,21 @@
     $(document).ready(function() {
         $(".login-input").on('change', function postinput(){
             var loginValue = $(this).val();
+            var messageElement = document.getElementById("login-error");
+            var submitButton = document.getElementById("registration_form_submit");
             $.ajax({
                 url: '${pageContext.request.contextPath}/rest/checkLogin/'+loginValue,
-                async: true,
+                async: false,
                 type: 'get',
                 success: function(responseData) {
-                    var messageElement = document.getElementById("login-error");
-                    var submitButton = document.getElementById("registration_form_submit")
-                    if(responseData.length < 20) {
-                        messageElement.setAttribute("class", "valid-message");
-                        submitButton.removeAttribute("disabled");
-                    }else{
                         messageElement.setAttribute("class", "error-message");
+                        messageElement.innerText = "Логин занят";
                         submitButton.setAttribute("disabled","disabled");
-                    }
-                    messageElement.innerText = responseData;
-                    console.log('Done: ', responseData);
                 },
                 error: function(responseData)  {
-                console.log('error: ', responseData);
+                    messageElement.setAttribute("class", "valid-message");
+                    messageElement.innerText = "Логин свободен";
+                    submitButton.removeAttribute("disabled");
             }
             });
     })})

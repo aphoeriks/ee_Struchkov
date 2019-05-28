@@ -10,11 +10,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import java.util.Optional;
 
 // Transactional for Hibernate
+
+@Repository
 @Transactional
 public class AccountDAOImpl implements AccountDAO {
 
@@ -22,63 +28,32 @@ public class AccountDAOImpl implements AccountDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public Account findAccount(String login ) {
+    public Optional<Account> findAccount(String login ) {
+        //todo
         Session session = sessionFactory.getCurrentSession();
-        Criteria crit = session.createCriteria(Account.class);
-        crit.add(Restrictions.eq("login", login));
-        return (Account) crit.uniqueResult();
+        Account a= session.find(Account.class, login);
+        return Optional.of(a);
     }
+
     @Override
-    public Account update(Account account) throws Exception{
-        sessionFactory.getCurrentSession().update(account);
-        return account;
-    }
-    @Override
-    public void updateCommerce(String login, int discount) throws Exception{
-        Account account = findAccount( login);
+    public void updateDiscount(String login, int discount) {
+        Account account = findAccount( login).get();
         account.getCommerce().setDiscount(discount);
         sessionFactory.getCurrentSession().update(account);
     }
     @Override
-    public AccountCommerce findAccountCommerce(String login){
-        Session session = sessionFactory.getCurrentSession();
-        Criteria crit = session.createCriteria(Account.class);
-        crit.add(Restrictions.eq("login", login));
-        return (AccountCommerce) crit.uniqueResult();
-    }
-
-    @Override
     public Account save(RegistrationForm data) throws Exception{
         String login = data.getLogin();
-
-
-        Account account = null;
-
         if (login != null) {
-            account = this.findAccount(login);
-        }
-        if (account != null) {
-            throw new Exception("Аккаунт уже зарегестрирован");
+            if (this.findAccount(login).isPresent()) {
+                throw new Exception("Аккаунт уже зарегестрирован");
+            }
         }
 
-        account = new Account();
-        account.setLogin(login);
-        account.setPassword(data.getPassword());
-        account.setRole(Account.ROLE_CUSTOMER);
-        account.setActive(true);
+//todo constructor
+        AccountContact contact = new AccountContact(data.getContact());
         AccountCommerce commerce = new AccountCommerce();
-        commerce.setBalance(new BigDecimal(2000));
-        commerce.setDiscount(5);
-        commerce.setAccount(account);
-        account.setCommerce(commerce);
-        AccountContact contact = new AccountContact();
-        contact.setAddress(data.getAddress());
-        contact.setName(data.getName());
-        contact.setSurname(data.getSurname());
-        contact.setPatronymic(data.getPatronymic());
-        contact.setPhone(data.getPhone());
-        contact.setAccount(account);
-        account.setContact(contact);
+        Account account = new Account(login, data.getPassword(), Account.ROLE_CUSTOMER, contact,commerce);
         this.sessionFactory.getCurrentSession().persist(account);
         return  account;
     }

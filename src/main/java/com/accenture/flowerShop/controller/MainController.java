@@ -103,6 +103,7 @@ public class MainController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "priceMin", defaultValue = "-1") double priceMin,
             @RequestParam(value = "priceMax", defaultValue = "-1") double priceMax,
+            @RequestParam(value = "cartError", defaultValue = "") String cartError,
             @Valid @ModelAttribute("flowerCartFormLine")FlowerCartFormLine line,
             BindingResult result){
 
@@ -116,6 +117,7 @@ public class MainController {
         model.addAttribute("priceMax", priceMax);
         model.addAttribute("accountData", accountData);
         model.addAttribute("paginationFlowers", paginationResult);
+        model.addAttribute("cartError", cartError);
         return "index";
     }
     @PostMapping("/newCartItem")
@@ -135,9 +137,6 @@ public class MainController {
     public String accountInfo(Model model) {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(userDetails.getPassword());
-        System.out.println(userDetails.getUsername());
-        System.out.println(userDetails.isEnabled());
         model.addAttribute("userDetails", userDetails);
         return "accountInfo";
     }
@@ -145,17 +144,22 @@ public class MainController {
     public String accountDataInitialisation(Model model){
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        accountData.initialize(accountDAO.findAccount(userDetails.getUsername()));
+        accountData.initialize(accountDAO.findAccount(userDetails.getUsername()).get());
         return "redirect:/";
     }
     @GetMapping("/CreateNewOrder")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public String creatingOrder(Model model,
             HttpServletRequest request){
+
         try {
-            orderDAO.save(accountData.getLogin(),accountData.getDiscount(), accountData.getCartInfo());
+            orderDAO.save(accountData.getCartInfo());
         }catch (Exception e){
-            return "redirect:"+request.getHeader("referer");
+            model.addAttribute("cartError", e.getMessage());
+            accountData.clearCart();
+            return "redirect:/";
         }
+
         accountData.clearCart();
         return "redirect:/orders";
     }

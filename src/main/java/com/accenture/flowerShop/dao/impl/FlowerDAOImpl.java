@@ -9,50 +9,44 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
-@Transactional
+
+@Service
 public class FlowerDAOImpl implements FlowerDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
     @Override
     public Flower findFlower(String name){
+        Session session = sessionFactory.getCurrentSession();
+        return session.find(Flower.class, name);
 
-        Session session =sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Flower> criteria = builder.createQuery(Flower.class);
-        Root<Flower> root = criteria.from(Flower.class);
-        criteria.select(root).where(builder.equal(root.get("name"), name));
-        Query<Flower> query = session.createQuery(criteria);
-
-        return query.getSingleResult();
     }
     @Override
     public List<Flower> getAllFlowers(){
+
         Session session =sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Flower> criteria = builder.createQuery(Flower.class);
-        Root<Flower> root = criteria.from(Flower.class);
-        criteria.select(root);
-        Query<Flower> query = session.createQuery(criteria);
+        String sql = "select f  from "+Flower.class.getName()+" f";
+
+        Query query = session.createQuery(sql);
         return query.getResultList();
+
     }
     @Override
     public List<Stock> getAllStocks(){
         Session session =sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Stock> criteria = builder.createQuery(Stock.class);
-        Root<Stock> root = criteria.from(Stock.class);
-        criteria.select(root);
-        Query<Stock> query = session.createQuery(criteria);
+        String sql = "select s  from "+Stock.class.getName()+" s";
+
+        Query query = session.createQuery(sql);
         return query.getResultList();
     }
+    @Transactional
     @Override
     public boolean updateStocks(List<Stock> stocks) throws Exception{
         Session session =sessionFactory.getCurrentSession();
@@ -61,17 +55,7 @@ public class FlowerDAOImpl implements FlowerDAO {
         }
         return true;
     }
-    /*@Override
-    public FlowerInfo getFlowerInfo(String name){
-        Flower flower = this.findFlower(name);
-        if(flower == null){
-            return null;
-        }
-        return new FlowerInfo(
-                flower.getName(),
-                flower.getPrice(),
-                flower.getStock().getQuantity());
-    }*/
+
 
     @Override
     public PaginationResult<FlowerInfo> queryFlowers(
@@ -82,27 +66,30 @@ public class FlowerDAOImpl implements FlowerDAO {
             double priceMin,
             double priceMax
     ){
+//TODO criteria api
+        Session session =sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<FlowerInfo> query1 = builder.createQuery(FlowerInfo.class);
+        Root<Flower> flowers = query1.from(Flower.class);
+        query1.select(builder.construct(FlowerInfo.class, flowers.get("name"), flowers.get("price"), flowers.get("stock").get("quantity")));
+        List<Predicate> criteria = new ArrayList<>();
 
-        String sql = "Select new " + FlowerInfo.class.getName() //
-                + "( p.name, p.price, q.quantity) " + " from "//
-                + Flower.class.getName() + " p ,"
-                + Stock.class.getName() + " q " +
-                "where lower(p.name) = lower(q.name) ";
         if (likeName != null && likeName.length() > 0) {
-            sql += " and lower(p.name) like :likeName ";
+            criteria.add(builder.like(builder.lower(flowers.get("name")), "%"+likeName.toLowerCase()+"%"));
         }
         if (priceMin > 0 ){
-            sql += "and p.price > " + priceMin;
+            criteria.add(builder.greaterThanOrEqualTo(flowers.get("price"), priceMin));
         }
         if (priceMax > 0 && priceMax > priceMin){
-            sql += "and p.price < " + priceMax;
+            criteria.add(builder.lessThanOrEqualTo(flowers.get("price"), priceMax));
         }
-        sql += " order by p.price desc ";
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery(sql);
-        if (likeName != null && likeName.length() > 0) {
-            query.setParameter("likeName", "%" + likeName.toLowerCase() + "%");
+        for(Predicate p: criteria){
+            query1.where(builder.and(p));
         }
-        return new PaginationResult<FlowerInfo>(query, page, maxResult, maxNavigationPage);
+        query1.orderBy(builder.desc(flowers.get("name")));
+        Query query = session.createQuery(query1);
+
+
+        return new PaginationResult<>(query, page, maxResult, maxNavigationPage);
     }
 }

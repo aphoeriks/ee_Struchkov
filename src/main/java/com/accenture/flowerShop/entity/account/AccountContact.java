@@ -28,6 +28,20 @@ public class AccountContact implements Serializable {
     private Account account;
 
     public AccountContact(){}
+    public AccountContact(String name, String surname, String patronymic, String address, String phone){
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.address = address;
+        this.phone = phone;
+    }
+    public AccountContact(AccountContact contact){
+        this.name = contact.name;
+        this.surname = contact.surname;
+        this.patronymic = contact.patronymic;
+        this.address = contact.address;
+        this.phone = contact.phone;
+    }
 
 
     public String getName() {
