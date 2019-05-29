@@ -4,7 +4,6 @@ import org.hibernate.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package com.accenture.flowerShop.controller.JMS;
 
 import com.accenture.flowerShop.dao.AccountDAO;
-import com.accenture.flowerShop.entity.account.Account;
-import com.accenture.flowerShop.entity.account.AccountCommerce;
 import com.accenture.flowerShop.model.jms.MessageDiscount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
@@ -11,7 +9,6 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;

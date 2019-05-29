@@ -4,6 +4,8 @@ import com.accenture.flowerShop.entity.order.Order;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,6 @@ public class Account implements Serializable {
     private static final long serialVersionUID = 2410246785624653099L;
 
     public static final String ROLE_CUSTOMER = "CUSTOMER";
-    public static final String ROLE_ADMIN = "ADMIN";
     @Id
     @Column(name = "LOGIN",length = 20)
     private String login;
@@ -23,7 +24,21 @@ public class Account implements Serializable {
     @Column(name = "ROLE",length = 20,nullable = false)
     private String Role;
     @Column(name = "ACTIVE", nullable = false)
-    private boolean active;
+    private Boolean active;
+    @Column(name = "BALANCE",nullable = false, precision = 10, scale = 2)
+    private BigDecimal balance;
+    @Column(name = "DISCOUNT", nullable = false)
+    private Integer discount;
+    @Column(name = "NAME",length = 20,nullable = false)
+    private String name;
+    @Column(name = "SURNAME",length = 20,nullable = false)
+    private String surname;
+    @Column(name = "PATRONYMIC",length = 20,nullable = false)
+    private String patronymic;
+    @Column(name = "ADDRESS",length = 40,nullable = false)
+    private String address;
+    @Column(name = "PHONE", nullable = false,length = 13)
+    private String phone;
 
     public boolean isActive() {
         return active;
@@ -35,20 +50,37 @@ public class Account implements Serializable {
 
     @OneToMany(mappedBy = "account")
     private List<Order> orders;
-    @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
-    private AccountContact contact;
 
-    @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
-    private AccountCommerce commerce;
-    public Account(String login, String password, String role, AccountContact contact, AccountCommerce commerce){
+public void setContact(String address,String phone,
+                          String name, String surname, String patronymic){
+    setAddress(address);
+    setPhone(phone);
+    setName(name);
+    setSurname(surname);
+    setPatronymic(patronymic);
+}
+public void setDefaultCommerce(){
+    setBalance(2000);
+    setDiscount(5);
+}
+public void setBalance(double value){
+    setBalance(new BigDecimal(value).setScale(2, RoundingMode.HALF_DOWN));
+}
+    public Account(String login, String password, String role,
+                   String address,String phone,
+                   String name, String surname, String patronymic){
         setLogin(login);
-        this.password = password;
-        this.Role = role;
-        this.active = true;
-        this.commerce = commerce;
-        this.contact = contact;
-        commerce.setAccount(this);
-        contact.setAccount(this);
+        setPassword(password);
+        setRole(role);
+        setActive(true);
+        setContact(address,phone,name,surname,patronymic);
+        setDefaultCommerce();
+    }
+    public Account(String login, String password, String role){
+        setLogin(login);
+        setPassword(password);
+        setRole(role);
+        setActive(true);
     }
 
     public Account( ){
@@ -92,19 +124,59 @@ public class Account implements Serializable {
         order.setAccount(this);
     }
 
-    public AccountContact getContact() {
-        return contact;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setContact(AccountContact contact) {
-        this.contact = contact;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
-    public AccountCommerce getCommerce() {
-        return commerce;
+    public Integer getDiscount() {
+        return discount;
     }
 
-    public void setCommerce(AccountCommerce commerce) {
-        this.commerce = commerce;
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

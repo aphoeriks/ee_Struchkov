@@ -1,9 +1,7 @@
 package com.accenture.flowerShop.dao;
 
 import com.accenture.flowerShop.entity.account.Account;
-import com.accenture.flowerShop.entity.account.AccountCommerce;
-import com.accenture.flowerShop.form.RegistrationForm;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,5 +14,10 @@ public interface AccountDAO {
 
     void updateDiscount(String login, int discount);
 
-    Account save(RegistrationForm registrationForm) throws Exception;
+
+    @Transactional
+    Account createAccount(Account account) throws Exception;
+
+    @Transactional
+    Account updateAccount(Account account);
 }

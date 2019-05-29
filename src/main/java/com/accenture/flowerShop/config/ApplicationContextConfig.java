@@ -1,11 +1,5 @@
 package com.accenture.flowerShop.config;
 
-import com.accenture.flowerShop.dao.AccountDAO;
-import com.accenture.flowerShop.dao.FlowerDAO;
-import com.accenture.flowerShop.dao.OrderDAO;
-import com.accenture.flowerShop.dao.impl.AccountDAOImpl;
-import com.accenture.flowerShop.dao.impl.FlowerDAOImpl;
-import com.accenture.flowerShop.dao.impl.OrderDaoImpl;
 import com.accenture.flowerShop.service.UserMarshallingServiceImpl;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -80,7 +74,7 @@ public class ApplicationContextConfig {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
 
         // Package contain entity classes
-        factoryBean.setPackagesToScan(new String[] { "com.accenture.flowerShop.entity.*" });
+        factoryBean.setPackagesToScan("com.accenture.flowerShop.entity.*");
         factoryBean.setDataSource(dataSource);
         factoryBean.setHibernateProperties(properties);
         factoryBean.afterPropertiesSet();

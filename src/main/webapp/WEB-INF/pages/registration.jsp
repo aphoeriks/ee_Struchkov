@@ -20,17 +20,27 @@
             var submitButton = document.getElementById("registration_form_submit");
             $.ajax({
                 url: '${pageContext.request.contextPath}/rest/checkLogin/'+loginValue,
-                async: false,
+                async: true,
                 type: 'get',
                 success: function(responseData) {
+                    if(responseData) {
+                        messageElement.setAttribute("class", "valid-message");
+                        messageElement.innerText = "Логин свободен";
+                        submitButton.removeAttribute("disabled");
+
+                        console.log("success:" + responseData);
+                    }else{
                         messageElement.setAttribute("class", "error-message");
                         messageElement.innerText = "Логин занят";
-                        submitButton.setAttribute("disabled","disabled");
+                        submitButton.setAttribute("disabled", "disabled");
+                        console.log("success:"+responseData);
+                    }
                 },
                 error: function(responseData)  {
-                    messageElement.setAttribute("class", "valid-message");
-                    messageElement.innerText = "Логин свободен";
-                    submitButton.removeAttribute("disabled");
+                    messageElement.setAttribute("class", "error-message");
+                    messageElement.innerText = "Сервер не отвечает";
+                    submitButton.setAttribute("disabled", "disabled");
+                    console.log("error:"+responseData);
             }
             });
     })})

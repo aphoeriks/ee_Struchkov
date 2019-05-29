@@ -1,7 +1,6 @@
 package com.accenture.flowerShop.dao;
 
 import com.accenture.flowerShop.entity.flower.Flower;
-import com.accenture.flowerShop.entity.flower.Stock;
 import com.accenture.flowerShop.model.FlowerInfo;
 import com.accenture.flowerShop.model.PaginationResult;
 
@@ -14,18 +13,11 @@ public interface FlowerDAO {
     Flower findFlower(String name);
 
 
+    Flower updateFlower(Flower flower);
+
     List<Flower> getAllFlowers();
 
-    List<Stock> getAllStocks();
 
-    boolean updateStocks(List<Stock> stocks) throws Exception;
 
-    PaginationResult<FlowerInfo> queryFlowers(
-            int page,
-            int maxResult,
-            int maxNavigationPage,
-            String likeName,
-            double priceMin,
-            double priceMax
-    );
+
 }

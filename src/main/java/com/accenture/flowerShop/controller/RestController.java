@@ -2,11 +2,12 @@ package com.accenture.flowerShop.controller;
 
 import com.accenture.flowerShop.dao.AccountDAO;
 import com.accenture.flowerShop.dao.FlowerDAO;
-import com.accenture.flowerShop.entity.account.Account;
 import com.accenture.flowerShop.entity.flower.Flower;
 import com.accenture.flowerShop.model.rest.ArrayWrapper;
 import com.accenture.flowerShop.model.rest.JsonResponse;
 import com.accenture.flowerShop.model.rest.ObjectWrapper;
+import com.accenture.flowerShop.service.AccountService;
+import com.accenture.flowerShop.service.FlowerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,24 +18,15 @@ import java.util.List;
 
 public class RestController {
     @Autowired
-    AccountDAO accountDAO;
+    AccountService accountService;
     @Autowired
-    FlowerDAO flowerDAO;
+    FlowerService flowerService;
     @GetMapping("/checkLogin/{login}")
     public Boolean loginIsValid(@PathVariable("login") String login) {
-        return !accountDAO.findAccount(login).isPresent();
+        return accountService.loginIsFree(login);
     }
 
-    @GetMapping(value = "/flowers",produces = "application/json")
-    public @ResponseBody ArrayWrapper<Flower> listFlowersHandler(){
-        List<Flower> flowers = flowerDAO.getAllFlowers();
-        return new ArrayWrapper<>(flowers);
-    }
-    @GetMapping(value = "/flowers/{name}",produces = "application/json")
-    public @ResponseBody ObjectWrapper<Flower> getFlower(@PathVariable("name") String name){
-        Flower flower = flowerDAO.findFlower(name);
-        return new ObjectWrapper<>(flower);
-    }
+    
     @PostMapping(value = "/flower",produces = "application/json")
     public @ResponseBody JsonResponse addFlower(@RequestBody Flower flower){
 

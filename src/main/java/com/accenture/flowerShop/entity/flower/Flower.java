@@ -19,11 +19,11 @@ public class Flower implements Serializable {
     private String name;
     @Column(name = "PRICE",nullable = false,precision = 10,scale = 2)
     private BigDecimal price;
+    @Column(name = "QUANTITY")
+    private long quantity;
 
     @OneToMany(mappedBy = "flower")
     private List<FlowerInOrder> flowersInOrder;
-    @OneToOne(mappedBy = "flower")
-    private Stock stock;
     public Flower(){
         flowersInOrder = new ArrayList<FlowerInOrder>();
     }
@@ -36,8 +36,6 @@ public class Flower implements Serializable {
     public Flower(String name, BigDecimal price, long quantity){
         this.name = name;
         this.price = price;
-        this.stock = new Stock();
-        this.stock.setQuantity(quantity);
         flowersInOrder = new ArrayList<FlowerInOrder>();
     }
 
@@ -54,7 +52,9 @@ public class Flower implements Serializable {
         return price;
     }
     public void addFlowerInOrder(FlowerInOrder flowerInOrder){
+        flowerInOrder.setFlower(this);
         this.flowersInOrder.add(flowerInOrder);
+
     }
 
     public void setPrice(BigDecimal price) {
@@ -69,13 +69,7 @@ public class Flower implements Serializable {
         this.flowersInOrder = flowersInOrder;
     }
 
-    public Stock getStock() {
-        return stock;
-    }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -91,4 +85,12 @@ public class Flower implements Serializable {
     }
     @Override
     public String toString(){return this.name;}
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
 }

@@ -1,7 +1,7 @@
 package com.accenture.flowerShop.service.soap;
 
 import com.accenture.flowerShop.dao.FlowerDAO;
-import com.accenture.flowerShop.entity.flower.Stock;
+import com.accenture.flowerShop.entity.flower.Flower;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.jws.WebService;
@@ -14,13 +14,13 @@ public class FlowerStockWebServiceImpl implements FlowerStockWebService {
     private FlowerDAO flowerDAO;
     @Override
     public boolean increaseFlowersStockSize(int count){
-        List<Stock> stocks = flowerDAO.getAllStocks();
-        for(Stock stock:stocks){
-            stock.setQuantity(stock.getQuantity()+count);
+        List<Flower> flowers = flowerDAO.getAllFlowers();
+        for(Flower flower:flowers){
+            flower.setQuantity(flower.getQuantity()+count);
+            try {
+                flowerDAO.updateFlower(flower);
+            }catch (Exception e){return false;}
         }
-        try {
-            flowerDAO.updateStocks(stocks);
-        }catch (Exception e){return false;}
         return true;
     }
     @Override

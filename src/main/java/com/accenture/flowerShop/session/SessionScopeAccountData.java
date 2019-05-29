@@ -24,8 +24,8 @@ public class SessionScopeAccountData {
     }
     public void initialize(Account account){
         if(account.getRole().equals(Account.ROLE_CUSTOMER)){
-            this.balance = account.getCommerce().getBalance();
-            this.discount = account.getCommerce().getDiscount();
+            this.balance = account.getBalance();
+            this.discount = account.getDiscount();
         }
         this.cartInfo = new CartInfo();
         this.login = account.getLogin();

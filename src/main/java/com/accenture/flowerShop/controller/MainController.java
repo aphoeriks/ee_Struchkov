@@ -11,6 +11,9 @@ import com.accenture.flowerShop.model.CartLine;
 import com.accenture.flowerShop.model.FlowerInfo;
 import com.accenture.flowerShop.model.OrderDto;
 import com.accenture.flowerShop.model.PaginationResult;
+import com.accenture.flowerShop.service.AccountService;
+import com.accenture.flowerShop.service.FlowerService;
+import com.accenture.flowerShop.service.OrderService;
 import com.accenture.flowerShop.service.UserMarshallingServiceImpl;
 import com.accenture.flowerShop.session.SessionScopeAccountData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +38,12 @@ import java.math.BigDecimal;
 // Need to use RedirectAttributes
 @EnableWebMvc
 public class MainController {
-
     @Autowired
-    private AccountDAO accountDAO;
+    private OrderService orderService;
     @Autowired
-    private FlowerDAO flowerDAO;
+    private AccountService accountService;
     @Autowired
-    private OrderDAO orderDAO;
+    private FlowerService flowerService;
     @Autowired
     private SessionScopeAccountData accountData;
     @Autowired
@@ -66,7 +68,7 @@ public class MainController {
         }
         Account account;
         try {
-            account = accountDAO.save(registrationForm);
+            account = accountService.save(registrationForm);
 
         } catch (Exception e) {
             String message = e.getMessage();
@@ -110,7 +112,7 @@ public class MainController {
         final int maxResult = 5;
         final int maxNavigationPage = 10;
 
-        PaginationResult<FlowerInfo> paginationResult = flowerDAO.queryFlowers(page, //
+        PaginationResult<FlowerInfo> paginationResult = flowerService.queryFlowers(page, //
                 maxResult, maxNavigationPage, likeName, priceMin, priceMax);
         model.addAttribute("name", likeName);
         model.addAttribute("priceMin", priceMin);
@@ -142,9 +144,7 @@ public class MainController {
     }
     @GetMapping("/account_data_initialisation")
     public String accountDataInitialisation(Model model){
-
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        accountData.initialize(accountDAO.findAccount(userDetails.getUsername()).get());
+        accountService.initialiseSession();
         return "redirect:/";
     }
     @GetMapping("/CreateNewOrder")
@@ -153,7 +153,7 @@ public class MainController {
             HttpServletRequest request){
 
         try {
-            orderDAO.save(accountData.getCartInfo());
+            orderService.createOrder(accountData.getCartInfo());
         }catch (Exception e){
             model.addAttribute("cartError", e.getMessage());
             accountData.clearCart();
@@ -171,7 +171,7 @@ public class MainController {
         final int maxResult = 5;
         final int maxNavigationPage = 10;
 
-        PaginationResult<OrderDto> paginationResult = orderDAO.queryOrders(page, //
+        PaginationResult<OrderDto> paginationResult = orderService.queryOrders(page, //
                 maxResult, maxNavigationPage, "sortByDate");
         model.addAttribute("accountData", accountData);
         model.addAttribute("paginationOrders", paginationResult);
@@ -182,10 +182,7 @@ public class MainController {
                            @RequestParam(value = "OrderId") long orderId){
 
         try {
-            BigDecimal newBalance;
-            newBalance = orderDAO.payOrder(orderId);
-
-            accountData.setBalance(newBalance);
+            orderService.payOrder(orderId);
         }catch (Exception e){
             return "redirect:"+request.getHeader("referer");
         }
@@ -200,7 +197,7 @@ public class MainController {
         final int maxResult = 5;
         final int maxNavigationPage = 10;
 
-        PaginationResult<OrderDto> paginationResult = orderDAO.queryOrders(page, //
+        PaginationResult<OrderDto> paginationResult = orderService.queryOrders(page, //
                 maxResult, maxNavigationPage, sortType, false);
         model.addAttribute("accountData", accountData);
         model.addAttribute("paginationOrders", paginationResult);
@@ -210,7 +207,7 @@ public class MainController {
     public String closeOrder(HttpServletRequest request,
                              @RequestParam(value = "OrderId") long orderId){
         try {
-            orderDAO.closeOrder(orderId);
+            orderService.closeOrder(orderId);
         }catch (Exception e){
             return "redirect:"+request.getHeader("referer");
         }
