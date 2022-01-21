@@ -20,7 +20,7 @@
         <junit.version>4.11</junit.version>
         <jstl.version>1.2</jstl.version>
         <jsp-api.version>2.3.3</jsp-api.version>
-        <h2.version>1.4.199</h2.version>
+        <h2.version>2.1.210</h2.version>
         <hibernate.version>5.3.9.Final</hibernate.version>
         <java-version>1.11</java-version>
         <cfx-version>3.3.2</cfx-version>
