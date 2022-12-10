@@ -15,7 +15,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.version>5.1.5.RELEASE</spring.version><!--4.2.5.RELEASE-->
+        <spring.version>6.0.0</spring.version><!--4.2.5.RELEASE-->
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <junit.version>4.11</junit.version>
         <jstl.version>1.2</jstl.version>
